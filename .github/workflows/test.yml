@@ -17,9 +17,27 @@ jobs:
           git -C "C:\VSC\CD\test\task" checkout test
           git -C "C:\VSC\CD\test\task" reset --hard origin/test
 
-      - name: Run test
+      - name: Check Python syntax
         shell: powershell
         run: |
           cd "C:\VSC\CD\test\task"
-          python hello.py
+          python -m py_compile hello.py
+
+      - name: Run and check program
+        shell: powershell
+        run: |
+          cd "C:\VSC\CD\test\task"
+
+          $output = python hello.py
+
+          if ($LASTEXITCODE -ne 0) {
+              Write-Error "Program crashed!"
+              exit 1
+          }
+
+          if ($output -ne "Hello World") {
+              Write-Error "Wrong output: $output"
+              exit 1
+          }
+
           Write-Host "Everything works correctly!"
