@@ -1,0 +1,25 @@
+name: Test Pipeline
+
+on:
+  push:
+    branches:
+      - test
+
+jobs:
+  test:
+    runs-on: [self-hosted, test]
+
+    steps:
+      - name: Update test folder
+        shell: powershell
+        run: |
+          git -C "C:\VSC\CD\test\task" fetch origin
+          git -C "C:\VSC\CD\test\task" checkout test
+          git -C "C:\VSC\CD\test\task" reset --hard origin/test
+
+      - name: Run test
+        shell: powershell
+        run: |
+          cd "C:\VSC\CD\test\task"
+          python hello.py
+          Write-Host "Everything works correctly!"

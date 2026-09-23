@@ -1,0 +1,24 @@
+name: Main Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run:
+    runs-on: [self-hosted, main]
+
+    steps:
+      - name: Update main folder
+        shell: powershell
+        run: |
+          git -C "C:\VSC\CD\main\task" fetch origin
+          git -C "C:\VSC\CD\main\task" checkout main
+          git -C "C:\VSC\CD\main\task" reset --hard origin/main
+
+      - name: Run program
+        shell: powershell
+        run: |
+          cd "C:\VSC\CD\main\task"
+          python hello.py
